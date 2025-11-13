@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>장기 API 테스트</title>
+</head>
+<body>
+  <h2>게임 저장 테스트</h2>
+  <button id="saveBtn">게임 상태 저장</button>
+
+  <script>
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+      const res = await fetch("/api/game/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          board_state: "테스트 보드",
+          turn: "player2",
+        }),
+      });
+      const data = await res.json();
+      console.log("서버 응답:", data);
+      alert(data.message);
+    });
+  </script>
+</body>
+</html>
