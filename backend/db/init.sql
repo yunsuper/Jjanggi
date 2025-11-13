@@ -7,7 +7,7 @@ CREATE TABLE Jjanggi.game_state (
 
 CREATE TABLE `Jjanggi`.`game_history` (
   `id` INT NULL AUTO_INCREMENT,
-  `turn` INT NULL,
+  `turn` ENUM('player1', 'player2') NOT NULL,
   `board_state` TEXT NULL,
   `current_player` ENUM('player1', 'player2') NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
