@@ -5,10 +5,10 @@ CREATE TABLE Jjanggi.game_state (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id));    -- 마지막 저장 시각
 
-CREATE TABLE `Jjanggi`.`game_history` (
-  `id` INT NULL AUTO_INCREMENT,
-  `turn` ENUM('player1', 'player2') NOT NULL,
-  `board_state` TEXT NULL,
-  `current_player` ENUM('player1', 'player2') NULL,
-  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (`id`));
+CREATE TABLE Jjanggi.game_history (
+	  id INT NULL AUTO_INCREMENT,
+	  turn ENUM('player1', 'player2') NOT NULL,
+	  board_state TEXT NULL,
+	  current_player ENUM('player1', 'player2') NULL,
+	  created_at DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
+	  PRIMARY KEY (id));
