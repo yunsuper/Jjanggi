@@ -1,0 +1,53 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5dc;
+}
+
+.title {
+    color: burlywood;
+    text-align: center;
+}
+
+.score-board {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    width: 800px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: #f5f5ef;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.turn-color {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.turn {
+    flex-grow: 1;
+}
+
+.new-game {
+    width: 100px;
+}
+
+.howToPlay {
+    width: 800px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: #f5f5ef;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 20px;
+}

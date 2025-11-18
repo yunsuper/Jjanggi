@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장기게임</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "phaser": "/libs/phaser/phaser.esm.js"
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="App.css">
+</head>
+<body>
+    <header>
+        <div class="title">
+            <h2>장기(Janggi)</h2>
+            <h4>Korean Chess</h4>
+        </div>
+        <div class="score-board">
+            <div class="turn-color"></div>
+            <div class="turn">현재 차례: </div>
+            <button class="new-game">새 게임</button>
+        </div>
+    </header>
+    <div id="game-container"></div>
+    <footer>
+        <div class="howToPlay">
+            <p>게임 방법:</p>
+            <ul>
+                <li>자신의 기물을 클릭하여 선택하고, 이동 가능한 위치를 확인하세요</li>
+                <li>파란 점이 표시된 위치로 이동할 수 있습니다</li>
+                <li>상대의 將(楚) 또는 漢을 잡으면 승리합니다</li>
+                <li>초는 녹색, 한은 빨간색으로 표시됩니다</li>
+            </ul>
+        </div>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
