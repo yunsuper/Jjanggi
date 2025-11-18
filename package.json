@@ -16,6 +16,7 @@
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",
     "mysql2": "^3.15.3",
+    "phaser": "^3.90.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
