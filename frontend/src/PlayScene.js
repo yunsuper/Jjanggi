@@ -1,284 +1,29 @@
 import * as Phaser from 'phaser';
-
-const newGameButton = document.querySelector('new-game');
+import { getPixelCoords, getPieceAssetKey, getPieceOwner } from './utils/coords.js';
+import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid';
 
 class PlayScene extends Phaser.Scene {
 
     constructor() {
         super('PlayScene');
+        
+        // 이 씬에서 사용할 변수들
+        this.room = {
+            id: null,
+            status: null,
+            players: [],
+        };
+
         this.selectedPieceId = null;
         this.movablePositions = [];
         this.movableMarkers = null;
-        
-        // 이 씬에서 사용할 변수들
+
         this.board_state = {
-            turn: "player1",
+            turn: null,
             pieces: {
-                player1: [
-                    {
-                        id: "p1-cha-left",
-                        type: "cha",
-                        x: 0,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-ma-left",
-                        type: "ma",
-                        x: 1,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-sang-left",
-                        type: "sang",
-                        x: 2,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-sa-left",
-                        type: "sa",
-                        x: 3,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-king",
-                        type: "king",
-                        x: 4,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-sa-right",
-                        type: "sa",
-                        x: 5,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-sang-right",
-                        type: "sang",
-                        x: 6,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-ma-right",
-                        type: "ma",
-                        x: 7,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-cha-right",
-                        type: "cha",
-                        x: 8,
-                        y: 9,
-                        alive: true,
-                        owner: "player1",
-                    },
-
-                    {
-                        id: "p1-po-left",
-                        type: "po",
-                        x: 1,
-                        y: 7,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-po-right",
-                        type: "po",
-                        x: 7,
-                        y: 7,
-                        alive: true,
-                        owner: "player1",
-                    },
-
-                    {
-                        id: "p1-b0",
-                        type: "byeong",
-                        x: 0,
-                        y: 6,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-b1",
-                        type: "byeong",
-                        x: 2,
-                        y: 6,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-b2",
-                        type: "byeong",
-                        x: 4,
-                        y: 6,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-b3",
-                        type: "byeong",
-                        x: 6,
-                        y: 6,
-                        alive: true,
-                        owner: "player1",
-                    },
-                    {
-                        id: "p1-b4",
-                        type: "byeong",
-                        x: 8,
-                        y: 6,
-                        alive: true,
-                        owner: "player1",
-                    },
-                ],
-                player2: [
-                    {
-                        id: "p2-cha-left",
-                        type: "cha",
-                        x: 0,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-ma-left",
-                        type: "ma",
-                        x: 1,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-sang-left",
-                        type: "sang",
-                        x: 2,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-sa-left",
-                        type: "sa",
-                        x: 3,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-king",
-                        type: "king",
-                        x: 4,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-sa-right",
-                        type: "sa",
-                        x: 5,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-sang-right",
-                        type: "sang",
-                        x: 6,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-ma-right",
-                        type: "ma",
-                        x: 7,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-cha-right",
-                        type: "cha",
-                        x: 8,
-                        y: 0,
-                        alive: true,
-                        owner: "player2",
-                    },
-
-                    {
-                        id: "p2-po-left",
-                        type: "po",
-                        x: 1,
-                        y: 2,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-po-right",
-                        type: "po",
-                        x: 7,
-                        y: 2,
-                        alive: true,
-                        owner: "player2",
-                    },
-
-                    {
-                        id: "p2-j0",
-                        type: "jol",
-                        x: 0,
-                        y: 3,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-j1",
-                        type: "jol",
-                        x: 2,
-                        y: 3,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-j2",
-                        type: "jol",
-                        x: 4,
-                        y: 3,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-j3",
-                        type: "jol",
-                        x: 6,
-                        y: 3,
-                        alive: true,
-                        owner: "player2",
-                    },
-                    {
-                        id: "p2-j4",
-                        type: "jol",
-                        x: 8,
-                        y: 3,
-                        alive: true,
-                        owner: "player2",
-                    },
-                ],
-            },
+                player1: [],
+                player2: []
+            }
         };
     }
 
@@ -299,6 +44,154 @@ class PlayScene extends Phaser.Scene {
 
     // 씬 생성 (소품/배우 배치)
     create() {
+
+        let playerId = localStorage.getItem('myPlayerId');
+        if(!playerId) {
+            playerId = uuidv4();
+            localStorage.setItem('myPlayerId', playerId);
+        }
+
+        const newGameButton = document.querySelector('#new-game');
+        const nicknameModal = document.querySelector('#nickname-modal');
+        const nicknameForm = document.querySelector('#nickname-form');
+        const nicknameInput = document.querySelector('#nickname-input');
+
+        const showNicknameModal = () => {
+            nicknameModal.classList.add('show');
+            nicknameInput.focus();
+        };
+
+        const hideNicknameModal = () => {
+            nicknameModal.classList.remove('show');
+        };
+
+        nicknameForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const nickname = nicknameInput.value;
+            if (nickname) {
+                console.log(`입력된 닉네임: ${nickname}`);
+                hideNicknameModal();
+                
+                joinRoom({
+                    room_id: this.room.id,
+                    player_id: playerId
+                });
+            }
+        });
+
+        const createRoom = async() => {
+            try {
+                const response = await fetch('/api/game/rooms/create', {method: 'POST'});
+                
+                if(!response.ok) {
+                    throw new Error(`네트워크 응답이 올바르지 않습니다: ${response.status}`);
+                }
+
+                const { room_id } = await response.json();
+                this.room.id = room_id;
+                console.log(`룸이 생성되었습니다. ID: ${this.room.id}`);
+                showNicknameModal();
+            } catch (error) {
+                console.error("Error fetching room id: ", error);
+            }
+        }
+
+        const joinRoom = async({ room_id, player_id }) => {
+            try {
+                const response = await fetch('/api/game/rooms/join', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        room_id: room_id,
+                        player_id: player_id
+                    })
+                });
+                
+                if(!response.ok) {
+                    throw new Error(`네트워크 응답이 올바르지 않습니다: ${response.status}`);
+                }
+
+                //TODO: 백엔드에서는 role만 보내주는데 room도 보내는 게 좋은지 확인하기
+                const { role, room } = await response.json();
+                this.room = room;
+
+                handleGameStart();
+            } catch (error) {
+                console.error("Error fetching role: ", error);
+            }
+        }
+
+        //TODO: resetGame을 단순히 board_state를 비우는 기능으로 만드는 게 좋을 것 같은데 어떤지
+        const resetGame = async () => {
+            try {
+                const response = await fetch('/api/game/reset', {method: 'POST'});
+                if (!response.ok) {
+                    throw new Error(`네트워크 응답이 올바르지 않습니다: ${response.status}`);
+                }
+                const data = await response.json();
+                return data.board_state;
+            } catch(error) {
+                console.error("Error fetching game reset: ", error);
+                return null;
+            }
+        };
+
+        //TODO: room의 status를 변경하는 코드가 없는데 어디서 만드는 게 좋은지
+        const setStatus = async (newStatus) => {
+            if (!this.room || !this.room.id) {
+                console.error("룸 정보가 없어 상태를 변경할 수 없습니다.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/game/${this.room.id}/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`네트워크 응답이 올바르지 않습니다: ${response.status}`);
+                }
+
+                const updatedRoom = await response.json();
+                this.room = updatedRoom;
+                console.log(`룸 상태가 서버에 의해 '${this.room.status}'(으)로 업데이트되었습니다.`);
+
+            } catch (error) {
+                console.error("룸 상태 업데이트 중 오류 발생:", error);
+            }
+        };
+        
+        const handleGameStart = async () => {
+            if (this.room.players.length === 2) {
+                
+                if (this.room.status === 'finished') {
+                    console.log("게임을 재시작합니다.");
+                } else {
+                    console.log("두 명의 플레이어가 모두 입장했습니다. 게임을 시작합니다.");
+                }
+
+                try {
+                    const newBoardState = await resetGame();
+                    
+                    renderBoard(newBoardState);
+
+                    await setStatus('playing');
+
+                } catch (error) {
+                    console.error("게임 시작 처리 중 오류가 발생했습니다:", error);
+                }
+
+            } else {
+                console.log("아직 플레이어가 모두 입장하지 않았습니다. 현재 인원:", this.room.players.length);
+            }
+        };
+
         const { width, height } = this.sys.game.config;
         this.pieceSpriteMap = {};
 
@@ -315,51 +208,9 @@ class PlayScene extends Phaser.Scene {
         const gridTopLeftX = (width - gridWidth) / 2;
         const gridTopLeftY = (height - gridHeight) / 2;
 
-        // 헬퍼 함수
-        // 격자 좌표를 실제 픽셀 좌표로 변환하는 함수
-        const getPixelCoords = (gridX, gridY) => {
-            return {
-                x: gridTopLeftX + gridX * tileWidth,
-                y: gridTopLeftY + gridY * tileHeight
-            };
-        }
+        const gridConfig = { gridTopLeftX, gridTopLeftY, tileWidth, tileHeight };
 
-        const getPieceAssetKey = (piece) => {
-            const type = piece.type;
-            const owner = piece.owner;
-        
-            if (owner === 'player1') {
-                switch (type) {
-                    case 'cha': return 'chocha';
-                    case 'ma': return 'choma';
-                    case 'sang': return 'chosang';
-                    case 'sa': return 'chosa';
-                    case 'king': return 'chowang';
-                    case 'po': return 'chopo';
-                    case 'byeong': return 'chojol';
-                    default: return '';
-                }
-            } else {
-                switch (type) {
-                    case 'cha': return 'hancha';
-                    case 'ma': return 'hanma';
-                    case 'sang': return 'hansang';
-                    case 'sa': return 'hansa';
-                    case 'king': return 'hanwang';
-                    case 'po': return 'hanpo';
-                    case 'jol': return 'hanjol';
-                    default: return '';
-                }
-            }
-        }
-
-        const getPieceOwner = (pieceId) => {
-            if(/^p1/.test(pieceId)) return 'player1';
-            else if(/^p2/.test(pieceId)) return 'player2';
-            else return 'unknown';
-        }
-
-        // 핵심 게임 로직 함수
+        //TODO: clickPiece 기능이 너무 많은 게 아닌지 확인하기
         const clickPiece = async(pointer, clickedSprite) => {
             try {
                 const clickedPieceId = clickedSprite.id;
@@ -422,7 +273,7 @@ class PlayScene extends Phaser.Scene {
                 const data = await response.json();
                 this.movablePositions = data.movablePositions;
                 console.log('이동 가능한 위치 (this.movablePositions): ', this.movablePositions);
-                this.displayMovablePositions(); // Draw markers on success
+                this.displayMovablePositions();
             } catch(error) {
                 console.error("이동 가능한 위치를 가져오는 데 실패했습니다: ", error);
                 this.movablePositions = [];
@@ -441,17 +292,10 @@ class PlayScene extends Phaser.Scene {
             const radius = tileWidth / 4;
 
             this.movablePositions.forEach((pos) => {
-                const pixelCoords = getPixelCoords(pos.x, pos.y);
+                const pixelCoords = getPixelCoords(pos.x, pos.y, gridConfig);
                 this.movableMarkers.fillCircle(pixelCoords.x, pixelCoords.y, radius);
             });
         };
-
-        const onBoardClicked = () => {
-            // 사용자가 장기판을 클릭
-            // clickedPiece가 있고 클릭한 부분이 이동 가능한 좌표일 때
-            // backend에 이동할 좌표를 보냄
-            // 업데이트된 board_state를 받아서 화면에 리렌더링
-        }
 
         // 이벤트 리스너
         board.on('pointerdown', (pointer) => {
@@ -475,51 +319,99 @@ class PlayScene extends Phaser.Scene {
             }
         });
 
-        // 게임 초기화 및 시작
-        const initializeBoard = async () => {
-            try {
-                const response = await fetch('/api/game/reset', {method: 'POST'});
-                if (!response.ok) {
-                    throw new Error(`네트워크 응답이 올바르지 않습니다: ${response.status}`);
+        if (newGameButton) {
+            newGameButton.addEventListener('click', () => {
+                handleGameStart();
+            });
+        }
+
+        // 게임 보드 그리기
+        const renderBoard = (boardState) => {
+            if (!boardState) {
+                console.error("Error NO boardState data", error);
+                return;
+            }
+            this.board_state = boardState;
+
+            Object.values(this.pieceSpriteMap).forEach(sprite => sprite.destroy());
+            this.pieceSpriteMap = {};
+
+            const allPieces = [
+                ...this.board_state.pieces.player1,
+                ...this.board_state.pieces.player2
+            ];
+
+            allPieces.forEach(piece => {
+                if (piece.alive) {
+                    const assetKey = getPieceAssetKey(piece);
+                    if (assetKey) {
+                        const pixelCoords = getPixelCoords(piece.x, piece.y, gridConfig);
+                        const sprite = this.add.sprite(pixelCoords.x, pixelCoords.y, assetKey);
+                        this.pieceSpriteMap[piece.id] = sprite;
+                        sprite.setInteractive();
+                        sprite.id = piece.id;
+                    }
+                }
+            });
+
+            updateTurnDisplay();
+        };
+
+        const updateTurnDisplay = () => {
+            const turnDisplay = document.querySelector('.turn-name');
+            if (turnDisplay) {
+                if (!this.board_state || !this.board_state.turn) {
+                    turnDisplay.innerText = '대기 중...';
+                    return;
                 }
 
-                const data = await response.json();
-                console.log("Initialized board data: ", data);
-                this.board_state = data.board_state;
-
-                const allPieces = [
-                    ...this.board_state.pieces.player1,
-                    ...this.board_state.pieces.player2
-                ];
-
-                allPieces.forEach(piece => {
-                    if (piece.alive) {
-                        const assetKey = getPieceAssetKey(piece);
-                        if (assetKey) {
-                            const pixelCoords = getPixelCoords(piece.x, piece.y);
-                            const sprite = this.add.sprite(pixelCoords.x, pixelCoords.y, assetKey);
-                            this.pieceSpriteMap[piece.id] = sprite;
-                            sprite.setInteractive();
-                            sprite.id = piece.id;
-                        }
-                    }
-                });
-            } catch(error) {
-                console.error("Error fetching initial board state: ", error);
+                switch (this.board_state.turn) {
+                    case 'cho':
+                        turnDisplay.innerText = '초(楚)';
+                        turnDisplay.style.color = 'green';
+                        break;
+                    case 'han':
+                        turnDisplay.innerText = '한(漢)';
+                        turnDisplay.style.color = 'red';
+                        break;
+                    default:
+                        turnDisplay.innerText = '대기 중...';
+                        turnDisplay.style.color = 'black';
+                }
             }
         };
         
-        initializeBoard();
+        // --- App Start ---
+        createRoom();
+
+        // 장기말 클릭
+        // 자신의 턴이 맞는지 확인
+        // 클릭한 말을 클릭된 상태로 변경(크기 키우기)
+        // 클릭한 말이 이동 가능한 위치 정보 요청
+        //const movablePositions = clickPiece();
+
+        // 이동 가능한 좌표 표시
+        // 이동 가능한 위치 정보 받아와 이동 가능 표시를 화면에 표시
+        //displayMovablePositions(movablePositions);
 
         // 장기말 이동
+        // 클릭한 말이 있는 상태에서 이동 가능 표시를 클릭 시
+        // 말의 위치를 이동해달라고 요청
+        // 업데이트된 위치 정보 받으면 updateBoardState 호출
         const movePiece = (piece) => {
-            // 장기말 클릭
-            const movablePositions = clickPiece(piece);
-            // 이동 가능한 좌표 표시
-            displayMovablePositions(movablePositions);
-            // 장기말 이동
-            onBoardClicked();
+            //TODO: 함수 만들기
+            //
+            updateBoardState();
         };
+        // 차례 바꾸기
+        const changeTurn = () => {};
+
+        // 화면 전체 업데이트
+        const updateBoardState = () => {
+            renderBoard(boardState);
+            //TODO: 게임 종료 상태인지 확인하는 함수 만들지 다른 곳에서 구현할지 생각하기
+            changeTurn();
+        }
 
         const saveGame = () => {}; // 게임 저장
 
@@ -528,12 +420,8 @@ class PlayScene extends Phaser.Scene {
     }
 
     update() {
-
+        // 프레임마다 실행됨, 사용되지 않을 예정
     }
-    
-    // (헬퍼 함수들)
-    // setupInputEvents()
-    // collectStar()
 }
 
 export default PlayScene;

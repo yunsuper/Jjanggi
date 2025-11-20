@@ -21,7 +21,7 @@
         </div>
         <div class="score-board">
             <div class="turn-color"></div>
-            <div class="turn">현재 차례: </div>
+            <div class="turn">현재 차례: <span class="turn-name"></span></div>
             <button class="new-game">새 게임</button>
         </div>
     </header>
@@ -38,5 +38,16 @@
         </div>
     </footer>
     <script type="module" src="/src/main.js"></script>
+
+    <!-- Nickname Modal -->
+    <div id="nickname-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>닉네임을 입력하세요</h2>
+            <form id="nickname-form">
+                <input type="text" id="nickname-input" placeholder="10자 이내" maxlength="10" required>
+                <button type="submit">확인</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
