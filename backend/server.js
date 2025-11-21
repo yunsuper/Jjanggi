@@ -3,8 +3,16 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 const path = require("path");
+const cors = require("cors");
 
 app.use(express.json());
+
+// --- CORS 설정 강화 ---
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+}));
 
 // ✅ 프론트엔드 정적 파일 제공 설정
 app.use(express.static(path.join(__dirname, "../frontend")));
